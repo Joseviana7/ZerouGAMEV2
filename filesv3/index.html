@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>ZerouGAME</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===== SPLASH ===== -->
+  <div id="screen-splash" class="screen active">
+    <div class="splash-bg"></div>
+    <div class="splash-content">
+      <div class="logo-wrap">
+        <div class="logo-icon">⚡</div>
+        <h1 class="logo-text">ZerouGAME<span>GAME</span></h1>
+      </div>
+      <p class="splash-sub">Joga. Aprende. Ganha.</p>
+      <div class="splash-loader"><div class="loader-bar"></div></div>
+    </div>
+  </div>
+
+  <!-- ===== LOGIN ===== -->
+  <div id="screen-login" class="screen">
+    <div class="auth-bg"></div>
+    <div class="auth-card">
+      <h2 class="auth-title">Entrar</h2>
+      <p class="auth-sub">Bem-vindo de volta!</p>
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" id="login-email" placeholder="ex: jose@email.com">
+      </div>
+      <div class="input-group">
+        <label>Senha</label>
+        <input type="password" id="login-pass" placeholder="••••••••">
+      </div>
+      <div id="login-error" class="error-msg"></div>
+      <button class="btn-primary" onclick="doLogin()">Entrar</button>
+      <p class="auth-link">Não tens conta? <a onclick="showScreen('register')">Criar conta</a></p>
+    </div>
+  </div>
+
+  <!-- ===== REGISTO ===== -->
+  <div id="screen-register" class="screen">
+    <div class="auth-bg"></div>
+    <div class="auth-card">
+      <h2 class="auth-title">Criar Conta</h2>
+      <p class="auth-sub">Começa a jogar grátis</p>
+      <div class="input-group">
+        <label>Nome completo</label>
+        <input type="text" id="reg-nome" placeholder="Teu nome">
+      </div>
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" id="reg-email" placeholder="ex: jose@email.com">
+      </div>
+      <div class="input-group">
+        <label>Senha (mínimo 6 caracteres)</label>
+        <input type="password" id="reg-pass" placeholder="••••••••">
+      </div>
+      <div id="reg-error" class="error-msg"></div>
+      <button class="btn-primary" onclick="doRegister()">Criar Conta</button>
+      <p class="auth-link">Já tens conta? <a onclick="showScreen('login')">Entrar</a></p>
+    </div>
+  </div>
+
+  <!-- ===== HOME ===== -->
+  <div id="screen-home" class="screen">
+    <div class="home-header">
+      <div class="header-user">
+        <div class="avatar" id="home-avatar">J</div>
+        <div>
+          <p class="header-greeting">Olá, <strong id="home-name">José</strong> 👋</p>
+          <p class="header-level" id="home-level">Nível 1</p>
+        </div>
+      </div>
+      <button class="btn-icon" onclick="renderHome()">🔄</button>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card gold"><span class="stat-icon">⭐</span><span class="stat-val" id="home-pontos">0</span><span class="stat-lbl">Pontos</span></div>
+      <div class="stat-card green"><span class="stat-icon">💵</span><span class="stat-val" id="home-saldo">0</span><span class="stat-lbl">Kz</span></div>
+      <div class="stat-card blue"><span class="stat-icon">⚡</span><span class="stat-val" id="home-energia">5</span><span class="stat-lbl">Energia</span></div>
+    </div>
+    <div class="section-title">O que queres fazer?</div>
+    <div class="menu-grid">
+      <button class="menu-card primary" onclick="startQuiz()"><span class="menu-icon">🎯</span><span class="menu-label">Jogar</span><span class="menu-sub">-1 ⚡</span></button>
+      <button class="menu-card" onclick="showScreen('missions')"><span class="menu-icon">📋</span><span class="menu-label">Missões</span><span class="menu-sub" id="home-missions-badge">3 disponíveis</span></button>
+      <button class="menu-card" onclick="showScreen('ranking')"><span class="menu-icon">🏆</span><span class="menu-label">Ranking</span><span class="menu-sub">Top semanal</span></button>
+      <button class="menu-card" onclick="showScreen('wallet')"><span class="menu-icon">💰</span><span class="menu-label">Carteira</span><span class="menu-sub">Sacar Kz</span></button>
+    </div>
+    <div class="section-title">Ganha mais energia</div>
+    <button class="btn-ad" onclick="watchAd('bonus')"><span>📺 Assistir anúncio</span><span class="ad-reward">+1 ⚡ ou +20 pts</span></button>
+    <div class="section-title">Progresso de hoje</div>
+    <div class="progress-card">
+      <div class="progress-row"><span>Jogos hoje</span><span id="prog-jogos">0 / 5</span></div>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" id="prog-jogos-bar" style="width:0%"></div></div>
+    </div>
+    <button class="btn-secondary" style="margin-top:20px;margin-left:20px;width:calc(100% - 40px);" onclick="doLogout()">Sair da conta</button>
+  </div>
+
+  <!-- ===== QUIZ ===== -->
+  <div id="screen-quiz" class="screen">
+    <div class="quiz-header"><button class="btn-back" onclick="exitQuiz()">← Sair</button><div class="quiz-meta"><span id="quiz-num">1/5</span><span id="quiz-score-live">0 pts</span></div></div>
+    <div class="timer-wrap"><div class="timer-ring"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" class="timer-bg"/><circle cx="50" cy="50" r="45" class="timer-fg" id="timer-circle"/></svg><span id="timer-num" class="timer-num">10</span></div></div>
+    <div class="question-card"><p class="question-category" id="q-category">Geral</p><p class="question-text" id="q-text">Carregando pergunta...</p></div>
+    <div class="options-grid" id="options-container"></div>
+  </div>
+
+  <!-- ===== RESULTADO ===== -->
+  <div id="screen-result" class="screen">
+    <div class="result-hero"><div class="result-emoji" id="result-emoji">🎉</div><h2 class="result-title" id="result-title">Parabéns!</h2><p class="result-sub" id="result-sub">Boa jogada!</p></div>
+    <div class="result-stats"><div class="result-stat"><span class="rs-val" id="res-acertos">0</span><span class="rs-lbl">Acertos</span></div><div class="result-stat"><span class="rs-val" id="res-pts">+0</span><span class="rs-lbl">Pontos</span></div><div class="result-stat"><span class="rs-val" id="res-kz">+0</span><span class="rs-lbl">Kz</span></div></div>
+    <button class="btn-primary" onclick="startQuiz()">Jogar de Novo ⚡</button>
+    <button class="btn-secondary" onclick="showScreen('home')">Voltar ao Início</button>
+  </div>
+
+  <!-- ===== MISSÕES ===== -->
+  <div id="screen-missions" class="screen">
+    <div class="page-header"><button class="btn-back" onclick="showScreen('home')">←</button><h2>Missões Diárias</h2><span class="reset-timer" id="missions-reset">Reset: 24h</span></div>
+    <div id="missions-list" class="missions-list"></div>
+  </div>
+
+  <!-- ===== RANKING ===== -->
+  <div id="screen-ranking" class="screen">
+    <div class="page-header"><button class="btn-back" onclick="showScreen('home')">←</button><h2>Ranking</h2><span>🏆</span></div>
+    <div class="ranking-top3" id="ranking-top3"></div>
+    <div class="ranking-list" id="ranking-list"></div>
+  </div>
+
+  <!-- ===== CARTEIRA ===== -->
+  <div id="screen-wallet" class="screen">
+    <div class="page-header"><button class="btn-back" onclick="showScreen('home')">←</button><h2>Carteira</h2><button class="btn-icon" onclick="renderWallet()" style="margin-left:auto;">🔄</button></div>
+    <div class="wallet-hero"><p class="wallet-pts-lbl">Os teus pontos</p><p class="wallet-pts" id="wallet-pontos">0</p><p class="wallet-kz-lbl">Equivalente a</p><p class="wallet-kz" id="wallet-kz">0 Kz</p><p class="wallet-rate">Taxa: 500 pts = 50 Kz</p></div>
+    <div class="section-title">Solicitar Saque</div>
+    <div class="withdraw-form">
+      <div class="input-group"><label>Método</label><select id="w-method"><option value="unitel">Unitel Money</option><option value="africell">Africell Money</option><option value="multicaixa">Multicaixa Express</option></select></div>
+      <div class="input-group"><label>Telefone</label><input type="tel" id="w-phone" placeholder="923 XXX XXX"></div>
+      <div class="input-group"><label>Valor (Kz) - Máx 100/dia</label><input type="number" id="w-amount" placeholder="Min: 50" min="50" max="100"></div>
+      <div id="w-error" class="error-msg"></div>
+      <button class="btn-primary" onclick="requestWithdraw()">Solicitar Saque</button>
+    </div>
+    <div class="section-title">Histórico</div>
+    <div id="wallet-history" class="history-list"></div>
+  </div>
+
+  <!-- ===== TOAST ===== -->
+  <div id="toast" class="toast"></div>
+
+  <!-- ===== AD MODAL ===== -->
+  <div id="ad-modal" class="modal-overlay" style="display:none">
+    <div class="modal-card">
+      <div class="ad-screen"><p class="ad-label">📺 ANÚNCIO</p><div class="ad-fake"><p>Espaço para anúncio</p><p style="font-size:12px;opacity:0.6">Aguarde 5 segundos</p></div><div class="ad-countdown" id="ad-countdown">Aguarda <span id="ad-timer">5</span>s</div><button class="btn-primary" id="ad-close-btn" onclick="closeAd()" disabled>Fechar</button></div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import {
+      getDatabase, ref, get, set, update, push,
+      query, orderByChild, limitToLast, equalTo,
+      onValue   /* ← ADICIONADO: listener realtime para saques */
+    } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
+    import {
+      getAuth, createUserWithEmailAndPassword,
+      signInWithEmailAndPassword, onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBOkcgZn-x3ThVQKZmyhVuhXo1GdwVbbOk",
+      authDomain: "zerougame.firebaseapp.com",
+      databaseURL: "https://zerougame-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "zerougame",
+      storageBucket: "zerougame.firebasestorage.app",
+      messagingSenderId: "539849156632",
+      appId: "1:539849156632:web:2686e84d3ebad19ea1fb6d"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const db   = getDatabase(app);
+    const auth = getAuth(app);
+
+    window.db   = db;
+    window.auth = auth;
+    window.firebase = {
+      ref, get, set, update, push,
+      query, orderByChild, limitToLast, equalTo,
+      onValue   /* ← exposto para o app.js usar */
+    };
+    window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+    window.signInWithEmailAndPassword     = signInWithEmailAndPassword;
+    window.onAuthStateChanged             = onAuthStateChanged;
+
+    console.log("✅ Firebase conectado!");
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>

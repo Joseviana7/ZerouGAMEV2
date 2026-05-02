@@ -1,0 +1,19 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read":  "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    },
+    "perguntas": {
+      ".read":  "auth !== null",
+      ".write": false
+    },
+    "saques": {
+      ".read":  "auth !== null",
+      ".write": "auth !== null",
+      ".indexOn": ["userId", "status"]
+    }
+  }
+}
